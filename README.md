@@ -75,7 +75,9 @@ AWSETL_Project/
   - A job that runs `Gold_Layer.ipynb`. Copy its Job ID into `dags/aws_etl.py`.
   - A Personal Access Token (PAT).
 
-> The AWS region is hard-coded as `ap-southeast-2` in `utils/`. Change it there if your resources are in another region.
+> **Important:** The AWS services and Databricks services must be in the same region.
+>
+> The AWS region is hard-coded as `ap-southeast-2` in `utils/`. If your resources are in another region, change it there.
 
 ## How to Run
 
