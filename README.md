@@ -12,11 +12,11 @@ GitHub CSVs (airports, bookings, passengers)
         ▼
 [extract_load_s3]              Bronze: raw CSVs → s3://<bucket>/bronze/<YYYY-MM-DD>/
         │
-        ├──► [transform_load_s3]            Silver: Glue Spark job "sliver_layer"
-        └──► [transform_load_s3_parquet]    Silver: Glue Spark job "sliver_layer_athena" (Parquet for Athena)
+        ├──► [transform_load_s3]            Silver: Glue Spark job "silver_layer"
+        └──► [transform_load_s3_parquet]    Silver: Glue Spark job "silver_layer_athena" (Parquet for Athena)
                         │
                         ▼
-              [trigger_crawler]             Glue Crawler "sliver_crawler" updates the Glue Data Catalog
+              [trigger_crawler]             Glue Crawler "silver_crawler" updates the Glue Data Catalog
                         │
                         ▼
               [trigger_databricks_job]      Gold: Databricks job builds the Gold layer
@@ -47,7 +47,7 @@ AWSETL_Project/
 │   └── aws_etl.py            # Airflow DAG definition
 ├── utils/
 │   ├── bronze_layer.py       # Fetch CSVs from the source and upload them to S3
-│   ├── sliver_layer.py       # Trigger and poll the Glue Spark jobs and the Glue Crawler
+│   ├── silver_layer.py       # Trigger and poll the Glue Spark jobs and the Glue Crawler
 │   └── gold_layer.py         # Trigger the Databricks job
 ├── note/
 │   ├── aws_iam_inline_policies/   # IAM policies used for the user, Glue and the Spark role
@@ -68,8 +68,8 @@ AWSETL_Project/
   - An S3 bucket. The code uses `kobe-airflow-bucket`; change it to your own bucket name in `dags/aws_etl.py`.
   - An IAM user with an access key and the permissions in `note/aws_iam_inline_policies/`.
   - An IAM role for Glue with S3 access (see `Permission For Role sparkaccess.txt`).
-  - Two Glue Spark jobs named `sliver_layer` and `sliver_layer_athena`. Create them from the scripts in `note/aws_spark_scripts/` and apply the job parameters in `spark_config.txt`.
-  - A Glue Crawler named `sliver_crawler` that points at the Silver layer output.
+  - Two Glue Spark jobs named `silver_layer` and `silver_layer_athena`. Create them from the scripts in `note/aws_spark_scripts/` and apply the job parameters in `spark_config.txt`.
+  - A Glue Crawler named `silver_crawler` that points at the Silver layer output.
 - A **Databricks** workspace (the free edition works) with:
   - The catalog created from `note/databricks notebook/Create Catalog.ipynb`.
   - A job that runs `Gold_Layer.ipynb`. Copy its Job ID into `dags/aws_etl.py`.
@@ -174,7 +174,7 @@ Each module in `utils/` has a `__main__` block, so you can test a layer outside 
 ```bash
 pip install -r requirements.txt apache-airflow-providers-amazon
 python -m utils.bronze_layer
-python -m utils.sliver_layer
+python -m utils.silver_layer
 python -m utils.gold_layer
 ```
 

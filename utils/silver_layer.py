@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-class SliverLayer():
+class SilverLayer():
 
     def __init__(self):
         pass
@@ -84,6 +84,6 @@ class SliverLayer():
         return response
 
 if __name__ == "__main__":
-    obj = SliverLayer()
-    job_run_id = obj.trigger_spark_job("sliver_layer", "2026-11-10")
+    obj = SilverLayer()
+    job_run_id = obj.trigger_spark_job("silver_layer", "2026-11-10")
     print(f"Glue job trigger with job id {job_run_id}")
